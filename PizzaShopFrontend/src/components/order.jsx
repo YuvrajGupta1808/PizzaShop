@@ -263,8 +263,9 @@ const Order = () => {
   const pizzaType = location.pathname.split("/").pop().toLowerCase();
   const currentPizza = featuredPizzas[pizzaType];
 
-  const addToCart = async () => {
+  const addToCart = () => {
     const pizzaDetails = {
+      id: Date.now(),
       name: pizzaName,
       image: pizzaImage,
       dough: selectedDough,
@@ -278,26 +279,10 @@ const Order = () => {
       quantity: 1,
     };
 
-    try {
-      const response = await fetch("http://localhost:5173/addpizza", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(pizzaDetails),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Pizza added successfully!", data);
-        navigate("/cart");
-      } else {
-        console.error("Failed to add pizza", data);
-      }
-    } catch (error) {
-      console.error("Error adding pizza", error);
-    }
+    // Mock add to cart
+    console.log("Mock pizza added successfully!", pizzaDetails);
+    addToCartContext(pizzaDetails);
+    navigate("/cart");
   };
 
   return (

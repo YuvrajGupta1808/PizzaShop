@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { mockCartItems } from "../data/mockData";
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -7,54 +8,24 @@ const CartPage = () => {
   const [pizzas, setPizzas] = useState([]);
 
   useEffect(() => {
-    const getPizzas = async () => {
-      try {
-        const response = await fetch("http://localhost:5173/allpizzas");
-        if (!response.ok) {
-          throw new Error("Failed to fetch pizzas");
-        }
-        const data = await response.json();
-        setPizzas(data);
-      } catch (error) {
-        console.error("Error fetching pizzas:", error);
-      }
-    };
-
-    getPizzas();
+    // Use mock data instead of API call
+    setPizzas(mockCartItems);
   }, []);
 
-  const handleUpdateQuantity = async (pizzaId, quantityChange) => {
-    try {
-      const response = await fetch(
-        `http://localhost:5173/api/pizzas/${pizzaId}/quantity`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ quantityChange }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to update quantity: ${response.statusText}`);
-      }
-
-      const updatedPizza = await response.json();
-      setPizzas(
-        pizzas.map((pizza) => {
-          if (pizza.id === pizzaId) {
-            return {
-              ...pizza,
-              quantity: pizza.quantity + quantityChange,
-            };
+  const handleUpdateQuantity = (pizzaId, quantityChange) => {
+    setPizzas((prevPizzas) =>
+      prevPizzas.map((pizza) => {
+        if (pizza.id === pizzaId) {
+          const newQuantity = Math.max(0, pizza.quantity + quantityChange);
+          if (newQuantity === 0) {
+            // Remove pizza if quantity becomes 0
+            return null;
           }
-          return pizza;
-        })
-      );
-    } catch (error) {
-      console.error("Failed to update quantity:", error);
-    }
+          return { ...pizza, quantity: newQuantity };
+        }
+        return pizza;
+      }).filter(Boolean) // Remove null values
+    );
   };
 
   const calculateTotal = () => {
@@ -69,31 +40,9 @@ const CartPage = () => {
     navigate("/build-pizza");
   };
 
-  const handleRemovePizza = async (pizzaId) => {
-    try {
-      const response = await fetch("http://localhost:5173/removepizza", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: pizzaId }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to remove pizza");
-      }
-
-      const result = await response.json();
-      if (result.success) {
-        // Update the local state to remove the pizza from the list
-        setPizzas(pizzas.filter((pizza) => pizza.id !== pizzaId));
-        console.log(`Removed pizza: ${result.name}`);
-      } else {
-        throw new Error(result.message || "Failed to remove pizza");
-      }
-    } catch (error) {
-      console.error("Failed to remove pizza:", error);
-    }
+  const handleRemovePizza = (pizzaId) => {
+    setPizzas(pizzas.filter((pizza) => pizza.id !== pizzaId));
+    console.log(`Removed pizza with ID: ${pizzaId}`);
   };
 
   const initialState = {

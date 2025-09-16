@@ -18,33 +18,11 @@ const SignupPage = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:3000/users/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: credentials.username,
-          email: credentials.email,
-          password: credentials.password,
-        }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Registered successfully!", data);
-        navigate("/login"); // Navigate to login page upon successful registration
-      } else {
-        console.log("Registration failed!", data.message);
-        setSignupError(data.message || "Invalid registration information");
-      }
-    } catch (error) {
-      console.error("Registration error:", error);
-      setSignupError("An error occurred. Please try again later.");
-    }
+    // Mock signup - just navigate to login
+    console.log("Mock signup successful!", credentials);
+    navigate("/login");
   };
 
   return (

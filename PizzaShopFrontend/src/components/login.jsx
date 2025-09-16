@@ -17,32 +17,18 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:5173/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: credentials.username,
-          password: credentials.password,
-        }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Logged in successfully!", data);
-        localStorage.setItem("token", data.token);
-        navigate("/home");
-      } else {
-        console.log("Login failed!", data);
-        setLoginError("Invalid username or password");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setLoginError("An error occurred. Please try again later.");
-    }
+    // Mock login - just store user data and navigate
+    const mockUser = {
+      id: 1,
+      username: credentials.username,
+      email: credentials.username + "@example.com"
+    };
+    localStorage.setItem("token", "mock-token-123");
+    localStorage.setItem("user", JSON.stringify(mockUser));
+    console.log("Mock login successful!", mockUser);
+    navigate("/");
   };
 
   return (

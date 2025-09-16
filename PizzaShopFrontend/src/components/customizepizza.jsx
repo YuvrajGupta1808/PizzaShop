@@ -132,34 +132,18 @@ const CustomizePizza = () => {
     );
   };
 
-  const createPizza = async (pizzaDetails) => {
-    try {
-      const response = await fetch("http://localhost:5173/pizzas/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(pizzaDetails),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      if (response.ok) {
-        return data.pizzaId;
-      } else {
-        throw new Error(data.message || "Failed to create pizza.");
-      }
-    } catch (error) {
-      console.error("Error creating pizza:", error);
-    }
+  const createPizza = (pizzaDetails) => {
+    // Mock pizza creation
+    const mockPizzaId = Date.now();
+    console.log("Mock pizza created successfully:", pizzaDetails);
+    return Promise.resolve(mockPizzaId);
   };
 
   const addToCart = async () => {
     const price = calculatePrice(selectedMeat, selectedVeggies);
 
     const pizzaDetails = {
+      id: Date.now(),
       name: pizzaName,
       image: pizzaImage,
       dough: selectedDough,
@@ -169,33 +153,13 @@ const CustomizePizza = () => {
       sauce: selectedSauce,
       specialInstructions: specialInstructions,
       price: price,
+      quantity: 1
     };
 
-    const pizzaId = await createPizza(pizzaDetails);
-    if (!pizzaId) return;
-
-    try {
-      const response = await fetch("http://localhost:5173/cart/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getAuthToken()}`,
-        },
-        body: JSON.stringify({ pizzaId, quantity: 1 }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        if (isLoggedIn()) {
-          navigate("/cart");
-        } else {
-          navigate("/login");
-        }
-      } else {
-        throw new Error(data.message || "Failed to add pizza to cart.");
-      }
-    } catch (error) {
-      console.error("Error adding pizza to cart:", error);
-    }
+    // Mock add to cart
+    console.log("Mock pizza added to cart successfully:", pizzaDetails);
+    addToCartContext(pizzaDetails);
+    navigate("/cart");
   };
 
   const handleSelection = (event, category, option) => {
