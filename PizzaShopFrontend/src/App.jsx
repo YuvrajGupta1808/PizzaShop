@@ -16,42 +16,11 @@ import Signup from "./components/signup";
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <CartProvider>
-        <Routes>
-          <Route path="/a" element={<Try />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/reservation" element={<ReservationForm />} />
-          <Route path="/build-pizza" element={<CreateYourPizza />} />
-          <Route path="/featured-pizza" element={<FeaturedPizza />} />
-          <Route path="/customize-pizza" element={<CustomizePizza />} />
-          <Route
-            path="/customize-pizza/createpizza"
-            element={<CustomizePizza />}
-          />
-          <Route
-            path="/customize-pizza/onetopping"
-            element={<CustomizePizza />}
-          />
-          <Route
-            path="/customize-pizza/twotoppings"
-            element={<CustomizePizza />}
-          />
-          <Route path="/order/margherita" element={<Order />} />
-          <Route path="/order/pepperoni" element={<Order />} />
-          <Route path="/order/vegetarian" element={<Order />} />
-          <Route path="/order/hawaiian" element={<Order />} />
-          <Route path="/order/meat%20lovers" element={<Order />} />
-          <Route path="/order/bbq%20chicken" element={<Order />} />
-          <Route path="*" element={<Home />} />
-          <Route path="/feedback" element={<Feedback />} />
-          <Route path="/cart" element={<CartPage />} />
-        </Routes>
-      </CartProvider>
-    </Router>
+    <div style={{ padding: '20px', textAlign: 'center' }}>
+      <h1 style={{ color: '#f59e0b', fontSize: '3rem' }}>🍕 Pizza Shop</h1>
+      <p style={{ fontSize: '1.2rem', marginTop: '20px' }}>Welcome to Pizza Point!</p>
+      <p style={{ marginTop: '10px' }}>Your standalone frontend is working! 🎉</p>
+    </div>
   );
 }
 
