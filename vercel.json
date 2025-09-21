@@ -1,0 +1,11 @@
+{
+  "buildCommand": "cd PizzaShopFrontend && npm run build",
+  "outputDirectory": "PizzaShopFrontend/dist",
+  "installCommand": "cd PizzaShopFrontend && npm install",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
