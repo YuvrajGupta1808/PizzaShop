@@ -1,9 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
 // Configuration
-const PORT = 5000;
-const MONGO_URI = "mongodb+srv://Gupta:Yuvi1234@pizzapoint.kznvrdq.mongodb.net/?retryWrites=true&w=majority&appName=PizzaPoint";
+const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://Gupta:Yuvi1234@pizzapoint.kznvrdq.mongodb.net/?retryWrites=true&w=majority&appName=PizzaPoint";
 
 console.log("🍕 Starting Pizza Shop Backend...");
 
@@ -16,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // CORS middleware (for frontend to connect)
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   if (req.method === 'OPTIONS') {
