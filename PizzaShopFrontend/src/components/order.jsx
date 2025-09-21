@@ -279,9 +279,9 @@ const Order = () => {
       quantity: 1,
     };
 
-    // Mock add to cart
-    console.log("Mock pizza added successfully!", pizzaDetails);
-    addToCartContext(pizzaDetails);
+    // Add to cart using context
+    console.log("Pizza added successfully!", pizzaDetails);
+    dispatch({ type: "ADD_ITEM", payload: pizzaDetails });
     navigate("/cart");
   };
 

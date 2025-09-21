@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [visible, setVisible] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const lastScrollY = useRef(window.scrollY);
 
   useEffect(() => {
@@ -19,14 +21,37 @@ function Navbar() {
     };
   }, []);
 
-  const navLinks = [
+  // Check authentication status on component mount and route changes
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, [location.pathname]);
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
+
+  // Dynamic nav links based on authentication status
+  const baseNavLinks = [
     { name: "Home", path: "/" },
     { name: "Build your Pizza", path: "/build-pizza" },
     { name: "Personalised Menu", path: "/featured-pizza" },
     { name: "Reservation", path: "/reservation" },
     { name: "Feedback", path: "/feedback" },
-    { name: "Login", path: "/login" },
   ];
+
+  // Add cart link for logged-in users
+  const cartLink = isLoggedIn ? [{ name: "Cart", path: "/cart" }] : [];
+
+  const authNavLink = isLoggedIn
+    ? { name: "Logout", action: handleLogout }
+    : { name: "Login", path: "/login" };
+
+  const navLinks = [...baseNavLinks, ...cartLink, authNavLink];
 
   return (
     <div
@@ -56,32 +81,52 @@ function Navbar() {
       </div>
 
       <div className="links flex gap-10 font-['Neue_Montreal']">
-        {navLinks.map((link, index) => (
-          <NavLink
-            key={index}
-            to={link.path}
-            className={({ isActive }) =>
-              `text-xl font-regular relative transition duration-300 ease-in-out ${
-                location.pathname === "/"
-                  ? "text-yellow-400 hover:text-white"
-                  : "text-black hover:text-yellow-500"
-              } ${isActive ? "underline" : ""}`
-            }
-            style={({ isActive }) =>
-              isActive
-                ? {
-                    textDecoration: "underline",
-                    textDecorationThickness: "2px",
-                    textUnderlineOffset: "6px",
-                    textDecorationColor:
-                      location.pathname === "/" ? "#facc15" : "black",
-                  }
-                : {}
-            }
-          >
-            {link.name}
-          </NavLink>
-        ))}
+        {navLinks.map((link, index) => {
+          // Handle logout button differently
+          if (link.action) {
+            return (
+              <button
+                key={index}
+                onClick={link.action}
+                className={`text-xl font-regular relative transition duration-300 ease-in-out ${
+                  location.pathname === "/"
+                    ? "text-yellow-400 hover:text-white"
+                    : "text-black hover:text-yellow-500"
+                } cursor-pointer`}
+              >
+                {link.name}
+              </button>
+            );
+          }
+          
+          // Regular navigation links
+          return (
+            <NavLink
+              key={index}
+              to={link.path}
+              className={({ isActive }) =>
+                `text-xl font-regular relative transition duration-300 ease-in-out ${
+                  location.pathname === "/"
+                    ? "text-yellow-400 hover:text-white"
+                    : "text-black hover:text-yellow-500"
+                } ${isActive ? "underline" : ""}`
+              }
+              style={({ isActive }) =>
+                isActive
+                  ? {
+                      textDecoration: "underline",
+                      textDecorationThickness: "2px",
+                      textUnderlineOffset: "6px",
+                      textDecorationColor:
+                        location.pathname === "/" ? "#facc15" : "black",
+                    }
+                  : {}
+              }
+            >
+              {link.name}
+            </NavLink>
+          );
+        })}
       </div>
     </div>
   );

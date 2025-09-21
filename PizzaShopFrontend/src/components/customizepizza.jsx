@@ -156,9 +156,9 @@ const CustomizePizza = () => {
       quantity: 1
     };
 
-    // Mock add to cart
-    console.log("Mock pizza added to cart successfully:", pizzaDetails);
-    addToCartContext(pizzaDetails);
+    // Add to cart using context
+    console.log("Pizza added to cart successfully:", pizzaDetails);
+    dispatch({ type: "ADD_ITEM", payload: pizzaDetails });
     navigate("/cart");
   };
 

@@ -1,6 +1,6 @@
 // API Configuration
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
-  (import.meta.env.PROD ? 'https://your-backend-url.herokuapp.com' : 'http://localhost:5000');
+  (import.meta.env.PROD ? 'https://pizza-shop-backend.onrender.com' : 'http://localhost:5000');
 
 // API Endpoints
 export const API_ENDPOINTS = {
